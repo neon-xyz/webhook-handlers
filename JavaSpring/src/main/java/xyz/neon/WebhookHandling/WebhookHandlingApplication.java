@@ -21,6 +21,7 @@ import java.util.Map;
 public class WebhookHandlingApplication {
 
 	private static final String HMAC_ALGORITHM = "HmacSHA256";
+	// This is the secret associated with your webhook. Secrets should be pulled in from environment variables.
 	private static final String SECRET_KEY = "9FZ9tiHM6I8ApZ3WA2WLud5dQRE9vJkIkOrpv4y207E=";
 
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public class WebhookHandlingApplication {
 	}
 
 	public ResponseEntity<Map<String, String>> response(HttpStatus status, String message) {
-		Map<String, String> map = new HashMap();
+		Map<String, String> map = new HashMap<>();
 		map.put("message", message);
 		return ResponseEntity.status(status).body(map);
 	}
@@ -42,6 +43,7 @@ public class WebhookHandlingApplication {
 				return response(HttpStatus.BAD_REQUEST, "HMAC signature is invalid.");
 			}
 
+			// responses aren't used and can be empty. Status code should be a 201 for success
 			return response(HttpStatus.CREATED, "Purchase processed");
 
 		} catch (NoSuchAlgorithmException | InvalidKeyException | JsonProcessingException e) {
